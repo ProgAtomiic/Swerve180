@@ -136,9 +136,9 @@ public class Robot extends TimedRobot {
       AnguloFD = NormalizarAngulo(AnguloFD+180); //Se passar, troca o ângulo por um oposto a ele mesmo e marca o módulo como "invertido".
       MotorFDInvertido = true;                   //
     }                                            //
-    // else{                                        //
-    //   MotorFDInvertido = false;                  //
-    // }                                            //
+    // else{                                        //Eu acho que n precisa dessas linhas que tão comentadas
+    //   MotorFDInvertido = false;                  //talvez depois eu apague
+    // }                                            //se puder testar se faz diferença eu agradeço
     //                                           //
     if(Math.abs(AnguloFE)>90){                   //
       AnguloFE = NormalizarAngulo(AnguloFE+180); //
