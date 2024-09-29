@@ -66,8 +66,7 @@ public class Robot extends TimedRobot {
     //   365 -> 5
     //  -200 -> 160 
 
-    //A wpilib tem a função Mathutil.anglemodulus() que faz a mesma coisa, mas essa só funciona com ângulo em radianos
-    //
+    //A wpilib até tem a função Mathutil.anglemodulus() que faz a mesma coisa, mas essa só funciona com ângulo em radianos
       
     //Fonte: https://stackoverflow.com/a/2323034
 
