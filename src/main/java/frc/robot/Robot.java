@@ -281,13 +281,23 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    UltimoAngulo_FD = EncoderFDCorrigido;
+    UltimoAngulo_FE = EncoderFECorrigido;
+    UltimoAngulo_TE = EncoderTECorrigido;
+    UltimoAngulo_TD = EncoderTDCorrigido;
+  }
 
   @Override
   public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    UltimoAngulo_FD = EncoderFDCorrigido;
+    UltimoAngulo_FE = EncoderFECorrigido;
+    UltimoAngulo_TE = EncoderTECorrigido;
+    UltimoAngulo_TD = EncoderTDCorrigido;
+  }
 
   @Override
   public void teleopPeriodic() {
