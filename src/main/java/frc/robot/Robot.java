@@ -15,15 +15,15 @@ public class Robot extends TimedRobot {
   //region
   Joystick Controle_0 = new Joystick(0);
 
-  CANSparkMax RotacaoFD = new CANSparkMax(26, MotorType.kBrushed);
-  CANSparkMax RotacaoFE = new CANSparkMax(24, MotorType.kBrushed);
-  CANSparkMax RotacaoTE = new CANSparkMax(20, MotorType.kBrushed);
-  CANSparkMax RotacaoTD = new CANSparkMax(22, MotorType.kBrushed);
+  CANSparkMax RotacaoFD = new CANSparkMax(00, MotorType.kBrushed);//TODO TROCAR OS IDS DOS SPARKS PARA OS USADOS NO SEU SISTEMA
+  CANSparkMax RotacaoFE = new CANSparkMax(00, MotorType.kBrushed);
+  CANSparkMax RotacaoTE = new CANSparkMax(00, MotorType.kBrushed);
+  CANSparkMax RotacaoTD = new CANSparkMax(00, MotorType.kBrushed);
  
-  CANSparkMax TracaoFD = new CANSparkMax(27, MotorType.kBrushless);
-  CANSparkMax TracaoFE = new CANSparkMax(25, MotorType.kBrushless);
-  CANSparkMax TracaoTE = new CANSparkMax(21, MotorType.kBrushless);
-  CANSparkMax TracaoTD = new CANSparkMax(23, MotorType.kBrushless);
+  CANSparkMax TracaoFD = new CANSparkMax(00, MotorType.kBrushless);
+  CANSparkMax TracaoFE = new CANSparkMax(00, MotorType.kBrushless);
+  CANSparkMax TracaoTE = new CANSparkMax(00, MotorType.kBrushless);
+  CANSparkMax TracaoTD = new CANSparkMax(00, MotorType.kBrushless);
 
   DutyCycleEncoder EncoderFD = new DutyCycleEncoder(1); //Portas DIO dos encoders
   DutyCycleEncoder EncoderFE = new DutyCycleEncoder(2); //
