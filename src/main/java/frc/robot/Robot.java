@@ -15,23 +15,23 @@ public class Robot extends TimedRobot {
   //region
   Joystick Controle_0 = new Joystick(0);
 
-  CANSparkMax RotacaoFD = new CANSparkMax(00, MotorType.kBrushed);//TODO TROCAR OS IDS DOS SPARKS PARA OS USADOS NO SEU SISTEMA
-  CANSparkMax RotacaoFE = new CANSparkMax(00, MotorType.kBrushed);
-  CANSparkMax RotacaoTE = new CANSparkMax(00, MotorType.kBrushed);
-  CANSparkMax RotacaoTD = new CANSparkMax(00, MotorType.kBrushed);
+  CANSparkMax RotacaoFD = new CANSparkMax(1, MotorType.kBrushed);//TODO TROCAR OS IDS DOS SPARKS PARA OS USADOS NO SEU ROBÔ
+  CANSparkMax RotacaoFE = new CANSparkMax(2, MotorType.kBrushed);
+  CANSparkMax RotacaoTE = new CANSparkMax(3, MotorType.kBrushed);
+  CANSparkMax RotacaoTD = new CANSparkMax(4, MotorType.kBrushed);
  
-  CANSparkMax TracaoFD = new CANSparkMax(00, MotorType.kBrushless);
-  CANSparkMax TracaoFE = new CANSparkMax(00, MotorType.kBrushless);
-  CANSparkMax TracaoTE = new CANSparkMax(00, MotorType.kBrushless);
-  CANSparkMax TracaoTD = new CANSparkMax(00, MotorType.kBrushless);
+  CANSparkMax TracaoFD = new CANSparkMax(5, MotorType.kBrushless);
+  CANSparkMax TracaoFE = new CANSparkMax(6, MotorType.kBrushless);
+  CANSparkMax TracaoTE = new CANSparkMax(7, MotorType.kBrushless);
+  CANSparkMax TracaoTD = new CANSparkMax(8, MotorType.kBrushless);
 
   DutyCycleEncoder EncoderFD = new DutyCycleEncoder(1); //Portas DIO dos encoders
-  DutyCycleEncoder EncoderFE = new DutyCycleEncoder(2); //
+  DutyCycleEncoder EncoderFE = new DutyCycleEncoder(2); //TODO TROCAR PARA OS CANAIS DIO USADOS NO SEU ROBÔ
   DutyCycleEncoder EncoderTE = new DutyCycleEncoder(3); //
   DutyCycleEncoder EncoderTD = new DutyCycleEncoder(4); //
 
-  PIDController Pid_FD = new PIDController(0, 0, 0);//Trocar as constantes para melhor controlar o seu sistema.
-  PIDController Pid_FE = new PIDController(0, 0, 0);//Geralmente só o kp já é suficiente
+  PIDController Pid_FD = new PIDController(0, 0, 0);//TODO Trocar as constantes para melhor controlar o seu robô.
+  PIDController Pid_FE = new PIDController(0, 0, 0);//     Geralmente só o kp já é suficiente
   PIDController Pid_TE = new PIDController(0, 0, 0);//
   PIDController Pid_TD = new PIDController(0, 0, 0);//
 
@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
   }
 
   public void MovimentarSwerve(double Input_X, double Input_Y, double Input_R){
-    final double TaxaMax = 1.3; //Limite de mudança por segundo do output das rodas de tração
+    final double TaxaMax = 1; //Limite de mudança por segundo do output das rodas de tração
     
     boolean MotorFDInvertido = false;    
     boolean MotorFEInvertido = false;  
@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
 
     direcaoFD = MathUtil.clamp(direcaoFD, -0.2, 0.2);//Limita o valor de velocidade que vai para o motor de rotação.
     direcaoFE = MathUtil.clamp(direcaoFE, -0.2, 0.2);//Isso ajuda a limitar a corrente dos motores para evitar queda de tensão da bateria.
-    direcaoTE = MathUtil.clamp(direcaoTE, -0.2, 0.2);//
+    direcaoTE = MathUtil.clamp(direcaoTE, -0.2, 0.2);//Além disso, geralmente facilita o processo de achar as constantes do PID
     direcaoTD = MathUtil.clamp(direcaoTD, -0.2, 0.2);//           
 
     RotacaoFD.set(direcaoFD);//Manda o valor calculado para o motor.
@@ -241,7 +241,7 @@ public class Robot extends TimedRobot {
     VelTD = VelTD * (Math.cos(Math.toRadians(Math.abs(EncoderTDCorrigido) - Math.abs(AnguloTD))));//
    
 
-    
+
     TracaoFD.set(VelFD);// Manda o valor calculado para o motor.
     TracaoFE.set(VelFE);//
     TracaoTE.set(VelTE);//
