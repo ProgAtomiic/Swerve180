@@ -9,35 +9,39 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
  
   //region
   Joystick Controle_0 = new Joystick(0);
 
-  CANSparkMax RotacaoFD = new CANSparkMax(1, MotorType.kBrushed);//TODO TROCAR OS IDS DOS SPARKS PARA OS USADOS NO SEU ROBÔ
+  CANSparkMax RotacaoFD = new CANSparkMax(6, MotorType.kBrushed);//TODO TROCAR OS IDS DOS SPARKS PARA OS USADOS NO SEU ROBÔ
   CANSparkMax RotacaoFE = new CANSparkMax(2, MotorType.kBrushed);
   CANSparkMax RotacaoTE = new CANSparkMax(3, MotorType.kBrushed);
-  CANSparkMax RotacaoTD = new CANSparkMax(4, MotorType.kBrushed);
+  CANSparkMax RotacaoTD = new CANSparkMax(7, MotorType.kBrushed);
  
   CANSparkMax TracaoFD = new CANSparkMax(5, MotorType.kBrushless);
-  CANSparkMax TracaoFE = new CANSparkMax(6, MotorType.kBrushless);
-  CANSparkMax TracaoTE = new CANSparkMax(7, MotorType.kBrushless);
-  CANSparkMax TracaoTD = new CANSparkMax(8, MotorType.kBrushless);
+  CANSparkMax TracaoFE = new CANSparkMax(8, MotorType.kBrushless);
+  CANSparkMax TracaoTE = new CANSparkMax(1, MotorType.kBrushless);
+  CANSparkMax TracaoTD = new CANSparkMax(4, MotorType.kBrushless);
 
-  DutyCycleEncoder EncoderFD = new DutyCycleEncoder(1); //Portas DIO dos encoders
-  DutyCycleEncoder EncoderFE = new DutyCycleEncoder(2); //TODO TROCAR PARA OS CANAIS DIO USADOS NO SEU ROBÔ
-  DutyCycleEncoder EncoderTE = new DutyCycleEncoder(3); //
-  DutyCycleEncoder EncoderTD = new DutyCycleEncoder(4); //
+  DutyCycleEncoder EncoderFD = new DutyCycleEncoder(0); //Portas DIO dos encoders
+  DutyCycleEncoder EncoderFE = new DutyCycleEncoder(3); //TODO TROCAR PARA OS CANAIS DIO USADOS NO SEU ROBÔ
+  DutyCycleEncoder EncoderTE = new DutyCycleEncoder(2); //
+  DutyCycleEncoder EncoderTD = new DutyCycleEncoder(1); //
 
-  PIDController Pid_FD = new PIDController(0, 0, 0);//TODO Trocar as constantes para melhor controlar o seu robô.
-  PIDController Pid_FE = new PIDController(0, 0, 0);//     Geralmente só o kp já é suficiente
-  PIDController Pid_TE = new PIDController(0, 0, 0);//
-  PIDController Pid_TD = new PIDController(0, 0, 0);//
+  PIDController Pid_FD = new PIDController(0.02, 0, 0.001);//TODO Trocar as constantes para melhor controlar o seu robô.
+  PIDController Pid_FE = new PIDController(0.02, 0, 0.001);//     Geralmente só o kp já é suficiente
+  PIDController Pid_TE = new PIDController(0.02, 0, 0.001);//
+  PIDController Pid_TD = new PIDController(0.02, 0, 0.001);//
 
+  int Autonomo = 0;
+  double t0;
   double EncoderFDCorrigido;
   double EncoderFECorrigido;  
   double EncoderTECorrigido;
+
   double EncoderTDCorrigido;
 
   double UltimoAngulo_FD;
@@ -170,7 +174,7 @@ public class Robot extends TimedRobot {
     double direcaoTE = Pid_TE.calculate(EncoderTECorrigido,AnguloTE);//  
     double direcaoTD = Pid_TD.calculate(EncoderTDCorrigido,AnguloTD);//  
 
-    direcaoFD = MathUtil.clamp(direcaoFD, -0.2, 0.2);//Limita o valor de velocidade que vai para o motor de rotação.
+    direcaoFD = MathUtil.clamp(direcaoFD, -0.3, 0.3);//Limita o valor de velocidade que vai para o motor de rotação.
     direcaoFE = MathUtil.clamp(direcaoFE, -0.2, 0.2);//Isso ajuda a limitar a corrente dos motores para evitar queda de tensão da bateria.
     direcaoTE = MathUtil.clamp(direcaoTE, -0.2, 0.2);//Além disso, geralmente facilita o processo de achar as constantes do PID
     direcaoTD = MathUtil.clamp(direcaoTD, -0.2, 0.2);//           
@@ -255,6 +259,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
+    SmartDashboard.putNumber("FE", EncoderFECorrigido);
+    SmartDashboard.putNumber("FD", EncoderFDCorrigido);
+    SmartDashboard.putNumber("TE", EncoderTECorrigido);
+    SmartDashboard.putNumber("TD", EncoderTDCorrigido);
+
    DiferencaTempoAtual = Timer.getFPGATimestamp() - TempoAtual;
    TempoAtual = Timer.getFPGATimestamp();
 
@@ -272,12 +281,11 @@ public class Robot extends TimedRobot {
 
 
 
-    EncoderFDCorrigido = (NormalizarAngulo((EncoderFD.getAbsolutePosition()*349)+0));//TODO   Colocar o offset certo para o seu encoder no lugar do 0
-    EncoderFECorrigido = (NormalizarAngulo((EncoderFE.getAbsolutePosition()*349)+0));//
-    EncoderTECorrigido = (NormalizarAngulo((EncoderTE.getAbsolutePosition()*349)+0));//
-    EncoderTDCorrigido = (NormalizarAngulo((EncoderTD.getAbsolutePosition()*349)+0));//
-
-
+    EncoderFDCorrigido = -(NormalizarAngulo((EncoderFD.getAbsolutePosition()*349)+162));//TODO   Colocar o offset certo para o seu encoder no lugar do 0
+    EncoderFECorrigido = (NormalizarAngulo((EncoderFE.getAbsolutePosition()*349)-140));//
+    EncoderTECorrigido = -(NormalizarAngulo((EncoderTE.getAbsolutePosition()*349)-20));//
+    EncoderTDCorrigido = (NormalizarAngulo((EncoderTD.getAbsolutePosition()*349)-32));//
+    
   }
 
   @Override
@@ -289,7 +297,37 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    switch(Autonomo){
+      case 0:
+      t0 = TempoAtual;
+      Autonomo = 1;
+      break;
+      
+      case 1:
+      if(TempoAtual - t0 < 3){
+        MovimentarSwerve(0, 0.1, 0);
+      } else{
+        MovimentarSwerve(0, 0, 0);
+        t0 = TempoAtual;
+        Autonomo = 2;
+      }
+      break;
+      case 2: 
+      if(TempoAtual - t0 < 4){
+        MovimentarSwerve(0.1, 0, 0);
+      }else{
+        MovimentarSwerve(0, 0, 0);
+        t0 = TempoAtual;
+        Autonomo = 3;
+      }
+      break;
+      case 3:
+      MovimentarSwerve(0, 0, 0);
+      break;
+    }
+
+  }
 
   @Override
   public void teleopInit() {
@@ -301,7 +339,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    MovimentarSwerve(Joystick_X, Joystick_Y, Joystick_R);
+    MovimentarSwerve(Joystick_X*-0.3, Joystick_Y*-0.3, Joystick_R*-0.3 );
   }
 
   @Override
